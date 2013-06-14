@@ -43,12 +43,36 @@ public class DriveHelper {
 		return new Drive.Builder(TRANSPORT, JSON_FACTORY, credentials).build();
 	}
 
-	/**
-	 * 
-	 * @param service
-	 * @return
-	 * @throws IOException
-	 */
+
+	public static List<File> retrieveFiles(Drive service, final String query) throws IOException {
+		List<File> result = new ArrayList<File>();
+		Files.List request = service.files().list().setQ(query);
+
+		result = DriveHelper.retrieveFiles(service, request);
+		
+		return result;
+	}
+	
+		
+	
+	static List<File> retrieveFiles(Drive service, Files.List request) throws IOException {
+		List<File> result = new ArrayList<File>();
+		do {
+			try {
+				FileList files = request.execute();
+
+				result.addAll(files.getItems());
+				request.setPageToken(files.getNextPageToken());
+			} catch (IOException e) {
+				System.out.println("An error occurred: " + e);
+				request.setPageToken(null);
+			}
+		} while (request.getPageToken() != null && request.getPageToken().length() > 0);
+		return result;
+	}
+
+	
+	
 	public static List<File> retrieveAllFiles(Drive service) throws IOException {
 		List<File> result = new ArrayList<File>();
 		Files.List request = service.files().list();
@@ -66,6 +90,6 @@ public class DriveHelper {
 		} while (request.getPageToken() != null && request.getPageToken().length() > 0);
 
 		return result;
-	}
-
+	}	
+	
 }

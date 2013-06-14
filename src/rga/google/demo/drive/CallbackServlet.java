@@ -52,69 +52,18 @@ public class CallbackServlet extends HttpServlet {
 		
 		System.out.println("Start@: " + new Date());
 		
-		List<File> files = DriveHelper.retrieveAllFiles(service);
+		List<File> files = DriveHelper.retrieveFiles(service, "title contains 'h2oh'");
 		resp.getWriter().println("Arquivos no Drive: " + files.size());
 		
 		System.out.println("End@: " + new Date());
 		
 		
-//		List list = service.files().list();
-//		for (int i = 0; i < list.size(); i++) {
-//			list.
-//		}
-		
-//		FileList fl = service.files().list().execute();
-
+		for (File file : files) {
+			resp.getWriter().println(" - " + file.getTitle() + "<br>");
+		}
 		
 		
 		
-		
-//		System.out.println(fl);
-		
-		
-
-//		String fileId = "1xrg9AFgvZj-pCjoToasMm4sS7B1jPTHH0FIJ7AC_jNg";
-//		 try {
-//		      File file = service.files().get(fileId).execute();
-//
-//		      System.out.println("Title: " + file.getTitle());
-//		      System.out.println("Description: " + file.getDescription());
-//		      System.out.println("MIME type: " + file.getMimeType());
-//		      
-//		    } catch (HttpResponseException e) {
-//		      if (e.getStatusCode() == 401) {
-//		        // Credentials have been revoked.
-//		        // TODO: Redirect the user to the authorization URL.
-//		        throw new UnsupportedOperationException();
-//		      }
-//		    } catch (IOException e) {
-//		      System.out.println("An error occurred: " + e);
-//		    }		
-		
-		
-//		List fileList = 
-//		FileList fileList = service.files().list().execute();
-
-	
-//		System.out.println("List: " + fileList);
-		
-//		
-//		
-//		try {
-////		      File file = service.files().get(fileId).execute();
-//
-//		      System.out.println("Title: " + file.getTitle());
-//		      System.out.println("Description: " + file.getDescription());
-//		      System.out.println("MIME type: " + file.getMimeType());
-//		    } catch (HttpResponseException e) {
-//		      if (e.getStatusCode() == 401) {
-//		        // Credentials have been revoked.
-//		        // TODO: Redirect the user to the authorization URL.
-//		        throw new UnsupportedOperationException();
-//		      }
-//		    } catch (IOException e) {
-//		      System.out.println("An error occurred: " + e);
-//		    }
 		
 		System.out.println("...");
 		
