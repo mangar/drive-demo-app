@@ -134,7 +134,7 @@ public class AuthenticationHelper {
 	 * @throws IOException
 	 *             Unable to load client_secrets.json.
 	 */
-	static GoogleAuthorizationCodeFlow getFlow() throws IOException {
+	public static GoogleAuthorizationCodeFlow getFlow() throws IOException {
 		if (flow == null) {
 			HttpTransport httpTransport = new NetHttpTransport();
 			JacksonFactory jsonFactory = new JacksonFactory();
@@ -236,6 +236,11 @@ public class AuthenticationHelper {
 			Userinfo userInfo = getUserInfo(credentials);
 			String userId = userInfo.getId();
 			emailAddress = userInfo.getEmail();
+			
+//			System.out.println("UserInfo:" + userInfo);
+			
+			
+			
 //			if (credentials.getRefreshToken() != null) {
 //				storeCredentials(userId, credentials);
 				return credentials;
