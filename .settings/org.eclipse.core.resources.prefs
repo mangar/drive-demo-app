@@ -1,0 +1,5 @@
+eclipse.preferences.version=1
+encoding//src/rga/google/demo/drive/CallbackServlet.java=UTF-8
+encoding//src/rga/google/helper/AuthenticationHelper.java=UTF-8
+encoding//war/WEB-INF/callback.jsp=UTF-8
+encoding//war/WEB-INF/login.jsp=UTF-8

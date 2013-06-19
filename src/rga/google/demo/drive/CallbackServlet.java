@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,88 +18,48 @@ import com.google.api.client.googleapis.media.MediaHttpUploader;
 import com.google.api.client.http.FileContent;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
-import com.google.appengine.api.images.ImagesServicePb.OutputSettings.MIME_TYPE;
 
 @SuppressWarnings("serial")
 public class CallbackServlet extends HttpServlet {
 
-	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
 
 		resp.setContentType("text/html");
-
-		// MyClass myClass = new MyClass();
-		// String url = myClass.getAuthorizationUrl("marcio.mangar@gmail.com", "scope");
-		// String url = AuthenticationHelper.getAuthorizationUrl("", "scope");
-
+		
 		String code = req.getParameter("code");
+		req.setAttribute("code", code);
+		
 		String state = req.getParameter("state");
-
-		resp.getWriter().println("Code: " + code + "<br>");
-		resp.getWriter().println("State: " + state + "<br>");
-
+		req.setAttribute("state", state);
+				
+		// 1 - obtendo a permissão (creentials) do usuario...		
 		Credential credential = this.getCredential(code, state);
-
 		String accessToken = credential.getAccessToken();
-		resp.getWriter().println("Access Token: " + accessToken + "<br>");
+		req.setAttribute("accessToken", accessToken);
+		
 
-		// GoogleCredential gCredential = new GoogleCredential();
-		// gCredential.setAccessToken(accessToken);
-
+		// 2 - criando o servico para manipular o Drive do usuário...		
 		Drive service = DriveHelper.buildService(credential);
-		resp.getWriter().println("Drive OK <br>");
-
-		resp.getWriter().println("<hr>");
 
 		System.out.println("Start@: " + new Date());
 
-		List<File> files = DriveHelper.retrieveFiles(service, "title contains 'h2oh'");
-		resp.getWriter().println("Arquivos no Drive: " + files.size());
+		// 3 - listando os arquivos do usuário ...		
+		List<File> files = DriveHelper.retrieveFiles(service, "title contains '" + state + "'");
+		
+		req.setAttribute("arquivosNoDrive", files.size());
 
+		req.setAttribute("files", files);
+		
 		System.out.println("End@: " + new Date());
 
-		for (File file : files) {
-			resp.getWriter().println(" - " + file.getTitle() + "<br>");
-		}
 
-		resp.getWriter().println("<hr>");
-
-		// //Insert a file
-		// File body = new File();
-		// body.setTitle("Plano de Midia - Modelo - Title");
-		// body.setDescription("Descrioption: Modelo de Plano de Midia");
-		// body.setMimeType("application/vnd.google-apps.document");
-		//
-		// java.io.File fileContent = new java.io.File("PlanoDeMidia-Modelo.docx");
-		//
-		// System.out.println(fileContent.getCanonicalFile());
-		// System.out.println(fileContent.getPath());
-		// System.out.println(fileContent.getAbsolutePath());
-		//
-		// FileContent mediaContent = new FileContent("application/vnd.google-apps.document", fileContent);
-		//
-		// File file = service.files().insert(body, mediaContent).execute();
-		// System.out.println("File ID: " + file.getId());
-		//
-		//
-
-//		java.io.File fileContent = new java.io.File("mario.jpeg");
-//
-//		File fileMetadata = new File();
-//		fileMetadata.setTitle("nome_do_arquivo");
-//		
-//		FileContent mediaContent = new FileContent("image/jpeg", fileContent);
-
-		
-		java.io.File fileContent = new java.io.File("Plano_de_Midia__Modelo.docx");
-//		java.io.File fileContent = new java.io.File("Plano_de_Midia_-_Modelo.gdoc");
+		// 4 - enviando um arquivo para o Drive do usuário...
+		java.io.File fileContent = new java.io.File("DocumentoModelo.docx");
 		
 		File fileMetadata = new File();
-//		fileMetadata.setTitle("Plano de Midia - Modelo.gdoc");
-		fileMetadata.setTitle("Plano de Midia - Modelo.docx");
-		
-//		FileContent mediaContent = new FileContent("application/vnd.google-apps.document", fileContent);	
+		fileMetadata.setTitle("Documento Modelo");
+			
 		FileContent mediaContent = new FileContent("application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileContent);
-//		FileContent mediaContent = new FileContent(null, fileContent);
 				
 		Drive.Files.Insert insert = service.files().insert(fileMetadata, mediaContent);
 		insert.setConvert(true);
@@ -105,20 +67,12 @@ public class CallbackServlet extends HttpServlet {
 		MediaHttpUploader uploader = insert.getMediaHttpUploader();
 		uploader.setDirectUploadEnabled(true);
 		
-		File file = insert.execute();
+		File file = insert.execute();		
+		req.setAttribute("fileIdUploaded", file.getId());
 
-		
-		
-		
-		
-		
-		String fileId = file.getId();
-		System.out.println(fileId);
-		
-		// return insert.execute();
 
-		System.out.println("...");
-
+		RequestDispatcher dispatcher = req.getRequestDispatcher("WEB-INF/callback.jsp");
+		dispatcher.forward(req, resp);
 	}
 
 	public Credential getCredential(final String code, final String state) {

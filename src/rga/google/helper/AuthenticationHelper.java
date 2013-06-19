@@ -18,7 +18,7 @@ import com.google.api.services.oauth2.Oauth2;
 import com.google.api.services.oauth2.model.Userinfo;
 
 /**
- * @author marciog
+ * Classe obtida na documentação do Google Drive API
  * 
  */
 public class AuthenticationHelper {
@@ -29,6 +29,8 @@ public class AuthenticationHelper {
 	 * Exception thrown when an error occurred while retrieving credentials.
 	 */
 	public static class GetCredentialsException extends Exception {
+
+		private static final long serialVersionUID = -8011332552765244001L;
 
 		protected String authorizationUrl;
 
@@ -62,6 +64,8 @@ public class AuthenticationHelper {
 	 */
 	public static class CodeExchangeException extends GetCredentialsException {
 
+		private static final long serialVersionUID = -1812692784152565763L;
+
 		/**
 		 * Construct a CodeExchangeException.
 		 * 
@@ -79,6 +83,8 @@ public class AuthenticationHelper {
 	 */
 	public static class NoRefreshTokenException extends GetCredentialsException {
 
+		private static final long serialVersionUID = 5936344018324087454L;
+
 		/**
 		 * Construct a NoRefreshTokenException.
 		 * 
@@ -95,6 +101,8 @@ public class AuthenticationHelper {
 	 * Exception thrown when no user ID could be retrieved.
 	 */
 	private static class NoUserIdException extends Exception {
+
+		private static final long serialVersionUID = 3272450759038567197L;
 	}
 
 	/**
@@ -228,28 +236,27 @@ public class AuthenticationHelper {
 	 * @throws IOException
 	 *             Unable to load client_secrets.json.
 	 */
-	public static Credential getCredentials(String authorizationCode, String state) throws CodeExchangeException, NoRefreshTokenException, IOException {
+	public static Credential getCredentials(String authorizationCode, String state) throws CodeExchangeException,
+			NoRefreshTokenException, IOException {
 		String emailAddress = "";
-		
+
 		try {
 			Credential credentials = exchangeCode(authorizationCode);
 			Userinfo userInfo = getUserInfo(credentials);
 			String userId = userInfo.getId();
 			emailAddress = userInfo.getEmail();
-			
-//			System.out.println("UserInfo:" + userInfo);
-			
-			
-			
-//			if (credentials.getRefreshToken() != null) {
-//				storeCredentials(userId, credentials);
-				return credentials;
-//			} else {
-//				credentials = getStoredCredentials(userId);
-//				if (credentials != null && credentials.getRefreshToken() != null) {
-//					return credentials;
-//				}
-//			}
+
+			// System.out.println("UserInfo:" + userInfo);
+
+			// if (credentials.getRefreshToken() != null) {
+			// storeCredentials(userId, credentials);
+			return credentials;
+			// } else {
+			// credentials = getStoredCredentials(userId);
+			// if (credentials != null && credentials.getRefreshToken() != null) {
+			// return credentials;
+			// }
+			// }
 		} catch (CodeExchangeException e) {
 			e.printStackTrace();
 			// Drive apps should try to retrieve the user and credentials for
