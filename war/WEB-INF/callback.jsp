@@ -25,16 +25,15 @@
   		<b>Access Token:</b> <%= request.getAttribute("accessToken")%> <br>
   		
   		<hr>
-  		Critério de busca: <b><i><%= request.getAttribute("state")%></i></b> <br>
+  		Crit&eacute;rio de busca: <b><i><%= request.getAttribute("state")%></i></b> <br>
   		# arquivos no Drive: <%= request.getAttribute("arquivosNoDrive") %> <br>
   		<b>Listagem:</b>
-  		<ul>
+
   		<% 
   		List<File> files = (List<File>)request.getAttribute("files");
-  		
         for (File file : files) {
             %>
-            <li><%= file.getTitle() %> </li>
+            <%= file.getTitle() %> <br>
         <%
         }  		
   		%>
@@ -53,6 +52,6 @@
   
   
   <br />
-
+<%@include file="footer.jsp" %>
 </body>
 </html>

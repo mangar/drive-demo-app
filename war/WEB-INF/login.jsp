@@ -15,13 +15,13 @@
   <div class="hero-unit center">
     <h1>Google Drive Demo </h1>
     <br />
-    <p>Esta aplicação solicita a permissão do usuário para: 
+    <p>Esta aplica&ccedil;&atilde;o solicita a permiss&atilde;o do usu&aacute;rio para: 
     <b>(1)</b> listar os documentos dado uma palavra chave, 
     <b>(2)</b> envia um documento .docx para o Google Drive e o 
     <b>(3)</b> converte para o formato nativo .gdoc</p>
 
-	<p>Toda a documentação deste site você pode encontrar aqui: <a href="#">http://codeinfected.com/blog/aaaaa</a></p>
-	<p>O código fonte está disponível no Github: <a href="https://github.com/mangar/drive-demo-app.git" target="_github">https://github.com/mangar/drive-demo-app.git</a></p>
+	<p>Toda a documenta&ccedil;&atilde;o deste site voc&ecirc; pode encontrar aqui: <a href="#">http://codeinfected.com/blog/aaaaa</a></p>
+	<p>O c&oacute;digo fonte est&aacute; dispon&iacute;vel no Github: <a href="https://github.com/mangar/drive-demo-app.git" target="_github">https://github.com/mangar/drive-demo-app.git</a></p>
 
 	<hr>
 
@@ -33,12 +33,12 @@
 
     <a href="#" 
     onclick="window.open('<%= request.getAttribute("url")%>&state=' + document.getElementById('searchkey').value, '_self')"
-    class="btn btn-large btn-info"><i class="icon-home icon-white"></i>Listar arquivos e Criar Documento</a>
+    class="btn btn-large btn-info">Listar arquivos e Criar Documento</a>
     
     
     
   </div>
   <br />
-
+<%@include file="footer.jsp" %>
 </body>
 </html>

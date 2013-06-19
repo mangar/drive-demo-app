@@ -167,7 +167,7 @@ public class AuthenticationHelper {
 		try {
 			GoogleAuthorizationCodeFlow flow = getFlow();
 			GoogleTokenResponse response = flow.newTokenRequest(authorizationCode)
-					.setRedirectUri(Constants.CLIENT_REDIRECT).execute();
+					.setRedirectUri(Constants.CLIENT_REDIRECT()).execute();
 			return flow.createAndStoreCredential(response, null);
 		} catch (IOException e) {
 			System.err.println("An error occurred: " + e);
@@ -212,7 +212,7 @@ public class AuthenticationHelper {
 	 */
 	public static String getAuthorizationUrl(String emailAddress, String state) throws IOException {
 		GoogleAuthorizationCodeRequestUrl urlBuilder = getFlow().newAuthorizationUrl()
-				.setRedirectUri(Constants.CLIENT_REDIRECT).setState(state);
+				.setRedirectUri(Constants.CLIENT_REDIRECT()).setState(state);
 		urlBuilder.set("user_id", emailAddress);
 		return urlBuilder.build();
 	}
